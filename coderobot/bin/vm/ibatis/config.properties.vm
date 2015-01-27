@@ -1,9 +1,0 @@
-# JDBC infomation
-jdbc.driverClassName=${driverClassName}
-jdbc.url=${url}
-jdbc.username=${username}
-jdbc.password=${password}
-jdbc.maxIdle=10
-jdbc.minIdle=3
-jdbc.maxActive=10
-jdbc.initialSize=5

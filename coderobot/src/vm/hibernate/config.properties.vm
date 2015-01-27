@@ -1,6 +1,0 @@
-# JDBC infomation
-jdbc.database=${database}
-jdbc.driverClassName=${driverClassName}
-jdbc.url=${url}
-jdbc.username=${username}
-jdbc.password=${password}
