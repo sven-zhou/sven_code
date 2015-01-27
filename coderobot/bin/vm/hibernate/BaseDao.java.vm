@@ -1,0 +1,27 @@
+package ${codepackage};
+
+import java.util.HashMap;
+import java.util.Map;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.springframework.orm.ibatis.support.SqlMapClientDaoSupport;
+import ${codepackage}.util.RandomGUID;
+
+public abstract class BaseDao extends SqlMapClientDaoSupport {
+    
+    protected final Log log;
+    
+    public BaseDao() {
+        log = LogFactory.getLog(super.getClass());
+    }
+    
+    public static String generateRandomGUID() {
+        return new RandomGUID().toString();
+    }
+    
+    protected Map<String, Object> getParamMap(String key, Object value) {
+        Map map = new HashMap();
+        map.put(key, value);
+        return map;
+    }
+}

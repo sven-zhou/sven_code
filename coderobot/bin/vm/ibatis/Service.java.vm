@@ -1,0 +1,59 @@
+package ${codepackage}.service;
+
+
+import java.util.*;
+import ${codepackage}.entity.${entityName};
+import ${codepackage}.dao.${beanName}Dao;
+
+import org.springframework.stereotype.Service;
+import org.springframework.beans.factory.annotation.Autowired;
+
+/**
+ * @Description: 
+ */
+@Service
+public class ${beanName}Service {
+	
+	@Autowired
+	private ${beanName}Dao dao;
+	
+	public boolean insert${beanName} (${entityName} entity) {
+		return dao.insert${beanName}(entity)>0;
+	}
+	
+	public boolean update${beanName}(${entityName} entity){
+		return 1 == dao.update${beanName}(entity);
+	}
+
+	public List<${entityName}> query${beanName}(${entityName} entity){
+		return dao.query${beanName}(entity);
+		
+	}
+	
+	public  void delete${beanName}(${entityName} entity){
+		dao.delete${beanName}(entity);
+	}
+	
+	public ${entityName} query${beanName}ById(#foreach($pkCol in $pkCols)String ${pkCol.getFieldName()} #if($velocityCount != $pkCols.size()),#end#end){
+		return dao.query${beanName}ById(#foreach($pkCol in $pkCols)${pkCol.getFieldName()} #if($velocityCount != $pkCols.size()),#end#end);
+	}
+	
+	 public int insert${beanName}List(List<${entityName}> list){
+		return dao.insert${beanName}List(list);
+	}
+	
+	public int update${beanName}List(List<${entityName}> list){
+		return dao.update${beanName}List(list);
+	}
+	
+#foreach ($extend in $sqlList)
+#if($extend.getTableName()==$tables.get(0).getName() )
+	 public #if($extend.getAction()=='select') List<${entityName}> #end #if($extend.getAction()=='update') int #end $extend.getKey()(#foreach($javaParamTypeAndParam in $extend.javaParamTypeAndParam)
+#if($javaParamTypeAndParam.param!='')$javaParamTypeAndParam.paramType $javaParamTypeAndParam.param #if($velocityCount != $extend.javaParamTypeAndParam.size()), #end#end
+#end){
+	 	return dao.$extend.getKey()(#foreach($javaParamTypeAndParam in $extend.javaParamTypeAndParam)
+#if($javaParamTypeAndParam.param!='')$javaParamTypeAndParam.param #if($velocityCount != $extend.javaParamTypeAndParam.size()), #end#end#end);
+	 }
+#end
+#end
+}

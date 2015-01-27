@@ -1,0 +1,30 @@
+package ${codepackage}.entity;
+
+import java.util.*;
+import java.math.*;
+
+
+/**
+ * describe your class here
+*/
+public class ${beanName}{
+
+	#foreach ($col in $cols)
+	
+	/**
+	 *  ${col.getRemark()}
+	 */
+    private ${col.getShortJavaType()} ${col.getFieldName()};
+    #end
+
+	#foreach ($col in $cols)
+	
+    public void set${col.getTemplateFieldName()}(${col.getShortJavaType()} ${col.getFieldName()}) {
+        this.${col.getFieldName()} = ${col.getFieldName()};
+    }
+    public ${col.getShortJavaType()} get${col.getTemplateFieldName()}() {
+        return ${col.getFieldName()};
+    }
+	#end
+
+}

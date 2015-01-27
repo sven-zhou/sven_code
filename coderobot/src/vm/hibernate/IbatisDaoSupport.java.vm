@@ -1,0 +1,37 @@
+package ${codepackage}.dao.ibatis;
+
+import java.util.*;
+import ${codepackage}.BaseDao;
+import ${codepackage}.entity.${beanName};
+import ${codepackage}.dao.${beanName}DAO;
+
+/**
+ * @author coder by hanman27@163.com
+ * <ul>
+ * <li>comment:ibatis DAO Support ${beanName}</li>
+ * </ul>
+ * @see ${codepackage}.entity.${beanName}
+ * @see ${codepackage}.dao.${beanName}DAO
+*/
+public class ${beanName}IbatisDAOSupport extends BaseDao implements ${beanName}DAO {
+
+    public void create${beanName}(${beanName} ${beanName.toLowerCase()}) {
+        getSqlMapClientTemplate().insert("create${beanName}");
+    }
+
+    public void modify${beanName}(${beanName} ${beanName.toLowerCase()}) {
+        getSqlMapClientTemplate().update("modify${beanName}");
+    }
+
+    public void remove${beanName}(${beanName} ${beanName.toLowerCase()}) {
+        getSqlMapClientTemplate().delete("remove${beanName}");
+    }
+
+    public List<${beanName}> query${beanName}(${beanName} ${beanName.toLowerCase()}) {
+        return getSqlMapClientTemplate().queryForList("query${beanName}", ${beanName.toLowerCase()});
+    }
+
+    public ${beanName} query${beanName}ById(String id) {
+        return (${beanName}) getSqlMapClientTemplate().queryForObject("query${beanName}ById", id);
+    }
+}
