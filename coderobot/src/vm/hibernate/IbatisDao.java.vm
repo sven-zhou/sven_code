@@ -1,0 +1,23 @@
+package ${codepackage}.dao;
+
+import java.util.*;
+import ${codepackage}.entity.${entityName};
+
+/**
+ * @author coder by hanman27@163.com
+ * <ul>
+ * <li>comment:Entity bean ${beanName}DAO</li>
+ * </ul>
+*/
+public interface ${beanName}DAO {
+
+    void create${beanName}(${entityName} ${beanName.toLowerCase()});
+
+    void modify${beanName}(${entityName} ${beanName});
+
+    void remove${beanName}(${entityName} ${beanName});
+
+    List<${beanName}> query${entityName}(${beanName} ${beanName});
+
+    ${entityName} query${beanName}ById(String id);
+}

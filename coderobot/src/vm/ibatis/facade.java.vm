@@ -1,0 +1,21 @@
+package ${codepackage}.facade;
+
+import java.util.*;
+import ${codepackage}.dto.${beanName}Dto;
+
+/**
+ * describe your class here
+*/
+public interface ${beanName}Facade {
+
+	//insert
+    public boolean insert${beanName}(${beanName}Dto ${beanName.toLowerCase()});
+
+	//modify
+  	public boolean update${beanName}(${beanName}Dto ${beanName.toLowerCase()});
+
+    public List<${beanName}Dto> query${beanName}(${beanName}Dto ${beanName.toLowerCase()});
+
+	//query by id
+    public ${beanName}Dto query${beanName}ById(#foreach($pkCol in $pkCols) String ${pkCol.getFieldName()} #if($velocityCount != $pkCols.size()), #end#end);
+}

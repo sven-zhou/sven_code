@@ -1,0 +1,106 @@
+package ${codepackage}.test;
+
+import java.lang.reflect.Method;
+import java.util.List;
+
+import org.junit.AfterClass;
+import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.Ignore;
+import org.junit.Test;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+
+
+import ${codepackage}.entity.${entityName};
+import ${codepackage}.service.${beanName}Service;
+
+
+public class ${beanName}ServiceTest {
+	private static ClassPathXmlApplicationContext appContext;
+	private ${beanName}Service bean;
+
+	@BeforeClass
+	public static void setUpBeforeClass() throws Exception {
+		if(null == appContext)
+			appContext = new ClassPathXmlApplicationContext("classpath:application_context_test.xml");
+	}
+
+	
+	@AfterClass
+	public static void tearDownAfterClass() throws Exception {
+	}
+
+
+	
+	@Before
+	public void setUp() throws Exception {
+		if(null == bean)
+			bean = appContext.getBean(${codepackage}.service.${beanName}Service.class);
+	}
+	
+	@Test
+	public void insert(){
+		bean.insert${beanName}(create${beanName}());
+		System.out.println("------------------insert");
+	}
+	
+	
+	@Test
+	public void update(){
+		bean.update${beanName}(create${beanName}());
+	}
+	
+	
+	@Test
+	public void select1(){
+		bean.query${beanName}ById("");
+	}
+
+	@Test
+	public void select(){
+		List<${entityName}> list = bean.query${beanName}(create${beanName}());
+		System.out.println(list.size());
+	}
+	
+	@Test
+	public void delete(){
+		${entityName} entity = new ${entityName}();
+		bean.delete${beanName}(entity);
+	}
+	
+	public static ${entityName} create${beanName}(){
+		${entityName} entity = new ${entityName}();
+
+		return entity;
+		
+	}
+	
+	/*
+	 * 右键 Run as --> java Application 
+	 * console 中打印 出需要用的 实体类
+	 */
+	public static void main(String[] args) {
+		printSetMethod();
+	}
+	
+	public static <T> void printSetMethod() 
+	{
+		Method[] methods = ${entityName}.class.getMethods();
+		System.out.println("${entityName} entity = new ${entityName}();" );
+		for (Method method : methods) 
+		{
+			Class<?>[] parameterTypes = method.getParameterTypes();
+			if (method.getName().startsWith("set")&& 1 == parameterTypes.length) 
+			{
+				String pa = "\"123456\"";
+				if(parameterTypes[0].getName().equals("java.util.Date"))
+				{
+					pa = "new java.util.Date()";
+				}
+				System.out.println("entity." + method.getName()+ "(" + pa + ");" );
+			}
+		}
+	}
+	
+
+}

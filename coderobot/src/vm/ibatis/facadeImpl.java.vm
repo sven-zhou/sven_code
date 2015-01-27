@@ -1,0 +1,57 @@
+package ${codepackage}.facadeImpl;
+
+import java.util.*;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.BeanUtils;
+import ${codepackage}.entity.${entityName};
+import ${codepackage}.service.${beanName}Service;
+import ${codepackage}.facade.${beanName}Facade;
+import ${codepackage}.dto.${beanName}Dto;
+import org.springframework.stereotype.Service;
+
+/**
+ * @Description: 
+ */
+@Service
+public class ${beanName}FacadeImpl implements ${beanName}Facade {
+
+	@Autowired
+	private ${beanName}Service ${beanName.toLowerCase()}Service;
+
+	//insert
+    public boolean insert${beanName}(${beanName}Dto ${beanName.toLowerCase()}Dto){
+    	${beanName}Entity ${beanName.toLowerCase()}Entity = new ${beanName}Entity();
+    	BeanUtils.copyProperties(${beanName.toLowerCase()}Dto, ${beanName.toLowerCase()}Entity);
+    	return ${beanName.toLowerCase()}Service.insert${beanName}(${beanName.toLowerCase()}Entity);
+    }
+  	
+  	public boolean update${beanName}(${beanName}Dto ${beanName.toLowerCase()}Dto){
+			${beanName}Entity ${beanName.toLowerCase()}Entity = new ${beanName}Entity();
+			BeanUtils.copyProperties(${beanName.toLowerCase()}Dto, ${beanName.toLowerCase()}Entity);
+			return ${beanName.toLowerCase()}Service.update${beanName}(${beanName.toLowerCase()}Entity);
+		}
+
+	public List<${beanName}Dto> query${beanName}(${beanName}Dto ${beanName.toLowerCase()}Dto) {
+		${beanName}Entity ${beanName.toLowerCase()}Entity = new ${beanName}Entity();
+		BeanUtils.copyProperties(${beanName.toLowerCase()}Dto, ${beanName.toLowerCase()}Entity);
+		List<${beanName}Entity> ${beanName.toLowerCase()}List = ${beanName.toLowerCase()}Service.query${beanName}(${beanName.toLowerCase()}Entity);
+
+		List<${beanName}Dto> list = new ArrayList<${beanName}Dto>();
+
+		for (${beanName}Entity ${beanName.toLowerCase()}Entity1 : ${beanName.toLowerCase()}List) {
+			${beanName}Dto ${beanName.toLowerCase()}Dto1 = new ${beanName}Dto();
+			BeanUtils.copyProperties(${beanName.toLowerCase()}Entity1, ${beanName.toLowerCase()}Dto1);
+			list.add(${beanName.toLowerCase()}Dto1);
+		}
+		return list;
+	}	
+   
+    public ${beanName}Dto query${beanName}ById(#foreach($pkCol in $pkCols) String ${pkCol.getFieldName()} #if($velocityCount != $pkCols.size()), #end#end) {
+			${beanName}Dto ${beanName.toLowerCase()}Dto = new ${beanName}Dto();
+			${beanName}Entity ${beanName}ById = ${beanName.toLowerCase()}Service.query${beanName}ById(#foreach($pkCol in $pkCols) ${pkCol.getFieldName()} #if($velocityCount != $pkCols.size()), #end#end);
+			if(null==${beanName}ById)
+				return null;
+			BeanUtils.copyProperties(${beanName}ById, ${beanName.toLowerCase()}Dto);
+			return ${beanName.toLowerCase()}Dto;
+		}
+}
