@@ -1,0 +1,30 @@
+package ${codepackage}.entity;
+
+import java.util.*;
+import java.math.*;
+
+
+/**
+ * describe your class here
+*/
+public class ${exendSql.getTableName()}Entity {
+
+	#foreach ($result in $exendSql.getResultTypeAndName())
+	
+	/**
+	 *  ${col.getRemark()}
+	 */
+    private ${result.getParamType()} ${result.getParam()};
+    #end
+
+	#foreach ($result in $exendSql.getResultTypeAndName())
+	
+    public void set${result.getParam()}(${result.getParamType()} ${result.getParam()}) {
+        this.${result.getParam()} = ${result.getParam()};
+    }
+    public ${result.getParamType()} get${result.getParam()}() {
+        return ${result.getParam()};
+    }
+	#end
+
+}

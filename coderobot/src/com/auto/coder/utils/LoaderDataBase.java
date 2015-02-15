@@ -9,13 +9,15 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 
-import com.auto.coder.ConvertType;
+import com.auto.coder.config.Constants;
+import com.auto.coder.convert.ConvertType;
 import com.auto.coder.convert.ConvertTypeMsSQL;
 import com.auto.coder.convert.ConvertTypeMySQL;
 import com.auto.coder.convert.ConvertTypeOracle;
-import com.auto.coder.data.Column;
-import com.auto.coder.data.ExtendSql;
-import com.auto.coder.data.Table;
+import com.auto.coder.structure.conf.ExtendSql;
+import com.auto.coder.structure.conf.MultiTableExendSql;
+import com.auto.coder.structure.db.Column;
+import com.auto.coder.structure.db.Table;
 
 /**
 * @ClassName: LoaderDataBase 
@@ -30,12 +32,23 @@ public class LoaderDataBase {
 
 	private static String database;
 
+	/**
+	* @Title: getTables 
+	* @Description: 组装表数据
+	* @param @param conn
+	* @param @param database
+	* @param @return
+	* @param @throws Exception    设定文件 
+	* @return List<Table>    返回类型 
+	* @throws
+	 */
 	public static List<Table> getTables(Connection conn, String database) throws Exception {
 		LoaderDataBase.database = database;
 		ArrayList<Table> tables = new ArrayList<Table>();
-		//获取添加sql
-		List<ExtendSql> installData = LoadExtendSql.installData();
+		
 		try {
+			
+			//加载表结构
 			DatabaseMetaData dbMetaData = conn.getMetaData();
 			// 可为:"TABLE", "VIEW", "SYSTEM TABLE",
 			// "GLOBAL TEMPORARY", "LOCAL TEMPORARY", "ALIAS", "SYNONYM"
@@ -44,7 +57,7 @@ public class LoaderDataBase {
 			while (tabs.next()) {
 				String tableName = (String) tabs.getObject("TABLE_NAME");
 				//可以根据表明进行筛选所需要的表
-				if (tableName.startsWith("ciq")) {
+				if (tableName.startsWith(Constants.TABLE_START_NAME)) {
 					logger.debug("tableName = " + tableName);
 					boolean flag = true;
 					for (Table table : tables) {
@@ -54,12 +67,15 @@ public class LoaderDataBase {
 					}
 					if (flag){
 						Table table = getTable(dbMetaData, tableName);
-						table.setSqlList(installData);
+						
+						//将单表自定义功能加入table数据
+						table.setSqlList(LoadExtendSql.extendSqls);
+						table.setType("ACTUAL");
 						tables.add(table);
 					}
 				}
-				//tables.add(getTable(dbMetaData, tableName));
 			}
+			
 			conn.close();
 		} catch (SQLException e) {
 			logger.error(e.getMessage(), e);
@@ -71,16 +87,14 @@ public class LoaderDataBase {
 		Table table = new Table();
 		// 从resultset中取值时一定要按查询的顺序读取。否则会跑异常（流以关闭）
 		try {
-			String columnName;
-			String columnType;
 			String remark;
 			table.setName(tableName);
 			table.setAlias(tableName.toUpperCase());
 			ResultSet colRet = dbMetaData.getColumns(null, "%", tableName, "%");
 			ResultSet pkSet = dbMetaData.getPrimaryKeys(null, null, tableName);
 			while (colRet.next()) {
-				columnName = colRet.getString("COLUMN_NAME");
-				columnType = colRet.getString("TYPE_NAME");
+				String columnName = colRet.getString("COLUMN_NAME");
+				String columnType = colRet.getString("TYPE_NAME");
 				
 				if("VARCHAR2".equals(columnType)||"LONGTEXT".equals(columnType)||"ENUM".equals(columnType))
 					columnType = "VARCHAR";
@@ -120,7 +134,7 @@ public class LoaderDataBase {
 			}
 			// 添加主键
 			while (pkSet.next()) {
-				columnName = pkSet.getString("COLUMN_NAME");
+				String columnName = pkSet.getString("COLUMN_NAME");
 				Column col = new Column();
 				col.setAlias(columnName.toUpperCase());
 				col.setName(columnName);

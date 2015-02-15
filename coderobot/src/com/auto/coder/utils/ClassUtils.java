@@ -1,6 +1,6 @@
 package com.auto.coder.utils;
 
-import com.auto.coder.Constants;
+import com.auto.coder.config.Constants;
 
 public class ClassUtils {
     
@@ -106,7 +106,5 @@ public class ClassUtils {
         System.out.println(ClassUtils.getClassName("tAble"));
         System.out.println(ClassUtils.getClassName("table_table"));
         System.out.println(ClassUtils.getClassName("table_table_table"));
-        
-        
     }
 }

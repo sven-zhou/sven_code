@@ -2,7 +2,7 @@ package com.auto.coder.generator;
 
 import java.util.List;
 
-import com.auto.coder.data.Table;
+import com.auto.coder.structure.db.Table;
 
 public class GeneratorFactory {
     

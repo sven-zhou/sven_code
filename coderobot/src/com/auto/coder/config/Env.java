@@ -6,8 +6,6 @@ import java.sql.DriverManager;
 import java.util.Properties;
 
 import org.apache.log4j.Logger;
-
-import com.auto.coder.Constants;
 /**
 * @ClassName: Env 
 * @Description: TODO(这里用一句话描述这个类的作用) 

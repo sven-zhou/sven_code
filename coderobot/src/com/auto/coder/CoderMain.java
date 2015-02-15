@@ -6,10 +6,11 @@ import java.util.List;
 import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
 
+import com.auto.coder.config.Constants;
 import com.auto.coder.config.Env;
-import com.auto.coder.data.Table;
 import com.auto.coder.generator.Generator;
 import com.auto.coder.generator.GeneratorFactory;
+import com.auto.coder.structure.db.Table;
 import com.auto.coder.utils.LoadExtendSql;
 import com.auto.coder.utils.LoaderDataBase;
 
@@ -31,8 +32,10 @@ public class CoderMain {
             PropertyConfigurator.configure("log4j.properties");
             env.init("config.properties");
             Connection conn = Env.getConnection();
-            LoadExtendSql.init("sql.properties");
+            LoadExtendSql.installData();
             List<Table> tables = LoaderDataBase.getTables(conn, Constants.DATABASE);
+          
+            tables.addAll(LoadExtendSql.getmultiColumn(tables));
             Generator generator = GeneratorFactory.Generate(Constants.CODE_SUPPORT, tables);
             
             generator.generateJavaFile();

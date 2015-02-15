@@ -13,9 +13,10 @@ import java.util.List;
 
 import org.apache.commons.io.FileUtils;
 
-import com.auto.coder.data.Column;
-import com.auto.coder.data.ExtendSql;
-import com.auto.coder.data.Table;
+import com.auto.coder.structure.conf.ExtendSql;
+import com.auto.coder.structure.conf.MultiTableExendSql;
+import com.auto.coder.structure.db.Column;
+import com.auto.coder.structure.db.Table;
 import com.auto.coder.utils.ClassUtils;
 import com.auto.coder.utils.LoadExtendSql;
 
@@ -57,13 +58,16 @@ public class IbatisSupportGenerator extends AbstractGenerator {
 			// generateBaseBean();
 			// 如果table不为空
 			if (null != tables) {
+				//单表的增删改查
 				for (Iterator<Table> i = tables.iterator(); i.hasNext();) {
 					Table table = i.next();
 					generateBean(table);
-					generateDAO(table);
-					//generateDAOSupport(table);
-					generateServiceInterface(table);
-					generateTest(table);
+//					if(table.getType().equals("ACTUAL")){
+						generateDAO(table);
+						generateServiceInterface(table);
+						generateTest(table);
+//					}
+//					generateDAOSupport(table);
 //					generateDto(table);
 //					generateFacade(table);
 //					generateFacadeImpl(table);
@@ -99,17 +103,6 @@ public class IbatisSupportGenerator extends AbstractGenerator {
 
 			logger.debug("Ibatis config file path:" + ibatisConfigFilePath);
 			logger.debug("Spring config file path:" + springConfigFilePath);
-
-			// 创建配置文件目录
-			/*File ibatisConfigFileFolder = new File(ibatisConfigFilePath);
-			if (!ibatisConfigFileFolder.exists()) {
-				FileUtils.forceMkdir(ibatisConfigFileFolder);
-			}
-
-			File springConfigFileFoler = new File(springConfigFilePath);
-			if (!springConfigFileFoler.exists()) {
-				FileUtils.forceMkdir(springConfigFileFoler);
-			}*/
 
 			// 生成sqlMapConfig.xml
 			generateSqlMapConfig();
@@ -221,6 +214,28 @@ public class IbatisSupportGenerator extends AbstractGenerator {
 		FileUtils.writeStringToFile(bean, content, ENCODING_JAVA);
 	}
 
+	private void generateMultiBean(MultiTableExendSql extendSql) throws Exception{
+		
+		String name = extendSql.getTableName();
+		
+		String className = ClassUtils.getClassName(name) + "Entity";
+		String beanPath = javaFilePath.concat(File.separator).concat("entity");
+		// Bean目录
+		File beanFolder = new File(beanPath);
+		if (!beanFolder.exists()) {
+			FileUtils.forceMkdir(beanFolder);
+		}
+		String fileName = beanPath.concat(File.separator).concat(className).concat(JAVA);
+		File bean = new File(fileName);
+		// 如果文件存在且需要备份,并删除原文件
+		bakFile(bean);
+		// 创建文件
+		FileUtils.touch(bean);
+
+		String content = coverVM2String("multitable/MultiBean.java.vm", extendSql);
+
+		FileUtils.writeStringToFile(bean, content, ENCODING_JAVA);
+	}
 	/**
 	 * 
 	 * <ul>
@@ -402,8 +417,15 @@ public class IbatisSupportGenerator extends AbstractGenerator {
 		if (null != tables) {
 			for (Iterator<Table> i = tables.iterator(); i.hasNext();) {
 				Table table = i.next();
-				String sqlMapName = "sqlmap-".concat(table.getJavaName()).concat(XML);
-				generateSqlMap(table, sqlMapsFilePath.concat("/").concat(sqlMapName));
+				if(table.getType().equals("ACTUAL")){
+					
+					//生成实际表的sqlmap
+					String sqlMapName = "sqlmap-".concat(table.getJavaName()).concat(XML);
+					generateSqlMap(table, sqlMapsFilePath.concat("/").concat(sqlMapName));
+				}else{
+					//生成虚拟表的sqlmap
+					
+				}
 			}
 		}
 		FileUtils.writeStringToFile(bean, content, ENCODING_XML);

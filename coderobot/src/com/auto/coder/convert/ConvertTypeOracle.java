@@ -1,6 +1,5 @@
 package com.auto.coder.convert;
 
-import com.auto.coder.ConvertType;
 
 /**
 * @ClassName: Env 

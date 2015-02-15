@@ -1,6 +1,5 @@
 package com.auto.coder.convert;
 
-import com.auto.coder.ConvertType;
 
 /**
 * @ClassName: Env 
@@ -12,7 +11,7 @@ public class ConvertTypeMySQL implements ConvertType {
 	/** 转换成 java.lang.String 的mysql类型 */
 	private static final String[] string = { "CHAR", "VARCHAR", "TINYTEXT", "TEXT", "MEDIUMTEXT", "LONGTEXT","ENUM" };
 	/** 转换成 java.lang.Integer 的mysql类型 */
-	private static final String[] inttype = { "TINYINT", "SMALLINT", "INT", "INT UNSIGNED" };
+	private static final String[] inttype = {"TINYINT", "SMALLINT","MEDIUMINT", "INT", "INT UNSIGNED" };
 	/** 转换成 java.math.BigInteger 的mysql类型 */
 	private static final String[] bigint = { "BIGINT" };
 	/** 转换成 java.lang.Float 的mysql类型 */

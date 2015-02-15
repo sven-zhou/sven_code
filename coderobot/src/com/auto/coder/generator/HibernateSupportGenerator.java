@@ -12,8 +12,8 @@ import java.util.List;
 
 import org.apache.commons.io.FileUtils;
 
-import com.auto.coder.data.Column;
-import com.auto.coder.data.Table;
+import com.auto.coder.structure.db.Column;
+import com.auto.coder.structure.db.Table;
 import com.auto.coder.utils.ClassUtils;
 
 /**
